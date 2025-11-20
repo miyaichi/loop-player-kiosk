@@ -1,0 +1,10 @@
+{
+  "window": {
+    "width": 1920,
+    "height": 1080
+  },
+  "schedule": [
+    { "type": "image", "src": "assets/publicdomainq-0003488fcwhri.png", "duration": 5 },
+    { "type": "url", "src": "http://example.com/", "duration": 15 }
+  ]
+}
