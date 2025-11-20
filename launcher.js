@@ -86,6 +86,16 @@ async function main() {
     try {
       // Determine which browser executable to use
       const browserExecutable = process.env.BROWSER === 'chromium' ? '/usr/lib/chromium/chromium' : undefined;
+      // Determine executable path based on platform
+      let executablePath;
+      if (process.platform === 'linux') {
+        // Raspberry Pi (or other Linux) – use Chromium if installed
+        executablePath = process.env.BROWSER_PATH || '/usr/lib/chromium-browser/chromium-browser';
+      } else if (process.platform === 'darwin') {
+        // macOS – use Google Chrome or Chromium if installed
+        executablePath = process.env.BROWSER_PATH || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
+      }
+
       const launchOptions = {
         headless: false, // Visible window
         defaultViewport: null,
@@ -98,11 +108,11 @@ async function main() {
           '--disable-web-security',
           '--allow-running-insecure-content'
         ],
-        ignoreDefaultArgs: ['--enable-automation']
+        ignoreDefaultArgs: ['--enable-automation'],
+        executablePath,
       };
-      if (browserExecutable) {
-        launchOptions.executablePath = browserExecutable;
-      }
+      // If executablePath is undefined, puppeteer will throw – ensure a valid path is set.
+
       browser = await puppeteer.launch(launchOptions);
 
       const pages = await browser.pages();
