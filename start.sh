@@ -15,6 +15,22 @@ if [[ "$1" == "--raspi" ]]; then
   echo "Running in Raspberry Pi mode (Chromium)"
 fi
 
+# Signal handler to forward signals to child process
+cleanup() {
+  echo "Stopping application..."
+  if [ -n "$APP_PID" ]; then
+    kill -TERM "$APP_PID" 2>/dev/null
+    wait "$APP_PID" 2>/dev/null
+  fi
+  exit 0
+}
+
+trap cleanup SIGTERM SIGINT SIGHUP
+
 # Start the application
 echo "Starting DOOH Loop Player..."
-npm start
+npm start &
+APP_PID=$!
+
+# Wait for the application to finish
+wait $APP_PID
