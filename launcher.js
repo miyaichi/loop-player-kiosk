@@ -26,7 +26,7 @@ const server = app.listen(port, async () => {
   console.log(`Server running at http://localhost:${assignedPort}`);
 
   // Determine which browser executable to use
-  const browserExecutable = process.env.BROWSER === 'chromium' ? '/usr/bin/chromium-browser' : undefined;
+  const browserExecutable = process.env.BROWSER === 'chromium' ? '/usr/lib/chromium/chromium' : undefined;
   const launchOptions = {
     headless: false, // Visible window
     defaultViewport: null,
