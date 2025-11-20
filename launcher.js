@@ -1,4 +1,4 @@
-const puppeteer = require('puppeteer');
+const puppeteer = require('puppeteer-core');
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
@@ -25,7 +25,9 @@ const server = app.listen(port, async () => {
   serverPort = assignedPort; // store for URL rewriting
   console.log(`Server running at http://localhost:${assignedPort}`);
 
-  const browser = await puppeteer.launch({
+  // Determine which browser executable to use
+  const browserExecutable = process.env.BROWSER === 'chromium' ? '/usr/bin/chromium-browser' : undefined;
+  const launchOptions = {
     headless: false, // Visible window
     defaultViewport: null,
     args: [
@@ -37,8 +39,12 @@ const server = app.listen(port, async () => {
       '--disable-web-security',
       '--allow-running-insecure-content'
     ],
-    ignoreDefaultArgs: ['--enable-automation'] // Hides "Chrome is being controlled by automated test software"
-  });
+    ignoreDefaultArgs: ['--enable-automation']
+  };
+  if (browserExecutable) {
+    launchOptions.executablePath = browserExecutable;
+  }
+  const browser = await puppeteer.launch(launchOptions);
 
   const pages = await browser.pages();
   const page = pages[0];

@@ -9,6 +9,12 @@ if [ ! -d "node_modules" ]; then
     npm install
 fi
 
+# Parse optional flag for Raspberry Pi
+if [[ "$1" == "--raspi" ]]; then
+  export BROWSER=chromium
+  echo "Running in Raspberry Pi mode (Chromium)"
+fi
+
 # Start the application
 echo "Starting DOOH Loop Player..."
 npm start

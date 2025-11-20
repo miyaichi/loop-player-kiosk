@@ -18,12 +18,22 @@ A simple DOOH (Digital Out‑of‑Home) loop player that runs Chrome in kiosk (f
 npm install
 ```
 
-## Run
+## Run on Desktop (Chrome)
 ```bash
 ./start.sh   # installs deps if needed and starts the app
 ```
 
-The app will start a local Express server, launch Chrome in kiosk mode and display the scheduled content.
+## Run on Raspberry Pi (Chromium)
+```bash
+# Install Chromium on Raspberry Pi
+sudo apt-get update
+sudo apt-get install -y chromium-browser
+
+# Start the player in Raspberry Pi mode
+./start.sh --raspi   # sets BROWSER=chromium and launches Chromium in kiosk mode
+```
+
+The app will start a local Express server, launch the chosen browser in kiosk mode and display the scheduled content.
 
 ## Configuration
 Edit `config.json` to change window size or schedule items.
